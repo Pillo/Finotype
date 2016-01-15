@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,30 +65,39 @@ public class MainActivity extends AppCompatActivity {
         int x=0;
         int y=0;
         int w=0;
-
+        int k=0;
+        int count2=0;
 
         for(int j=0; j<bitmap.getWidth(); j++){
-            count++;
+
+            if (j!= 0)
+                if (intArray[j]/intArray[j-1]<1.1||intArray[j-1]/intArray[j]<1.1){
+                    count++;
             top+=intArray[j];
-        }
+        }}
 
         top= (top/count);
         if (top<0)
             top= top*-1;
         count=0;
         for(int j=intArray.length-bitmap.getWidth(); j<bitmap.getWidth()*bitmap.getHeight(); j++){
+            if (j!= intArray.length-bitmap.getWidth())
+            if (intArray[j]/intArray[j-1]<1.1||intArray[j-1]/intArray[j]<1.1){
             count++;
-            bottom+=intArray[j];
-        }
+            bottom+=intArray[j];}
+            }
+
         if (count!=0)
         bottom=(bottom/count);
         if (bottom<0)
             bottom= bottom*-1;
         count=0;
-        for(int j=0; j<bitmap.getWidth()*bitmap.getHeight(); j+=bitmap.getWidth()){
-            count++;
+        for(int j=0; j<bitmap.getWidth()*bitmap.getHeight()-bitmap.getWidth(); j+=bitmap.getWidth()){
+            if (j!= 0)
+                if (intArray[j]/intArray[j-1]<1.1||intArray[j-1]/intArray[j]<1.1){
             left+=intArray[j];
-        }
+                count++;}}
+
         if (count!=0)
             left= (left/count);
         if (left<0)
@@ -95,9 +105,11 @@ public class MainActivity extends AppCompatActivity {
         count=0;
 
         for(int j=bitmap.getWidth(); j<bitmap.getWidth()*bitmap.getHeight(); j+=bitmap.getWidth()){
-            count++;
+            if (j!= bitmap.getWidth())
+                if (intArray[j]/intArray[j-1]<1.1||intArray[j-1]/intArray[j]<1.1){
             right+=intArray[j];
-        }
+            count++;}}
+
         if (count!=0)
         right= (right/count);
 
@@ -105,13 +117,13 @@ public class MainActivity extends AppCompatActivity {
             right= right*-1;
 
         for (int i =0; i<intArray.length; i++){
-
-                 if (x==bitmap1.getWidth()-1){
+                 if (x==bitmap.getWidth()-1){
                  x=0;
                  if (y!=bitmap.getHeight()-1){
                  y++;}
                  }else{
             x++;}
+
 
             if (intArray[i]<0)
                 w= intArray[i]*-1;
@@ -120,11 +132,55 @@ public class MainActivity extends AppCompatActivity {
 
             if (w/top>1.75||top/w>1.75&&w/bottom>1.75||bottom/w>1.75&&w/left>1.75||left/w>1.75&&right/w>1.75||w/right>1.75){
                 bitmap1.setPixel(x, y, intArray[i]);
-            }
-        }
-        imageView.setImageBitmap(bitmap1);
+            }}
 
-    }
+
+          y=0;
+          x=0;
+        count=0;
+
+
+
+        Bitmap bitmap2= Bitmap.createBitmap(bitmap1.getWidth(), bitmap1.getHeight(), Bitmap.Config.RGB_565);
+        int intArray1[] = new int[bitmap1.getWidth()*bitmap1.getHeight()];
+        bitmap1.getPixels(intArray1, 0, bitmap1.getWidth(), 0, 0, bitmap1.getWidth(), bitmap1.getHeight());
+
+        for(int j=0; j<bitmap1.getWidth()*3; j++){
+            if (j!= 0)
+                if(intArray1[j]!=-16777216&&intArray1[j-1]!=-16777216){
+                    Log.i("here", ""+ intArray1[j]);
+                    count++;
+                    top+=intArray1[j];
+                }}
+
+        top = (top / count);
+        if (top<0)
+            top= top*-1;
+
+
+        for (int i =0; i<intArray1.length; i++){
+            if (x==bitmap1.getWidth()-1){
+                x=0;
+                if (y!=bitmap1.getHeight()-1){
+                    y++;}
+            }else{
+                x++;}
+
+
+            if (intArray1[i]<0)
+                w= intArray1[i]*-1;
+            else
+                w=intArray1[i];
+
+
+
+            if (w/top>1.75||top/w>1.75){
+                    bitmap2.setPixel(x, y, intArray1[i]);
+                }
+        imageView.setImageBitmap(bitmap2);}}
+
+
+
 
 
     @Override
