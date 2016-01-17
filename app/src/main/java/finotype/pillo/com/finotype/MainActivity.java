@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,25 +52,25 @@ public class MainActivity extends AppCompatActivity {
     public void backgroundColor(Bitmap bitmap){
 
 
-        Bitmap bitmap1= Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
+        Bitmap bitmap1= Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         int intArray[] = new int[bitmap.getWidth()*bitmap.getHeight()];
         bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
 
-        int top=0;
-        int bottom=0;
-        int right=0;
-        int left=0;
-        int count=0;
+        double top=0;
+        double bottom=0;
+        double right=0;
+        double left=0;
+        double count=0;
+        double jj=0;
+        double kk=0;
         int x=0;
         int y=0;
-        int w=0;
-        int k=0;
-        int count2=0;
+        double w=0;
 
         for(int j=0; j<bitmap.getWidth(); j++){
 
             if (j!= 0)
-                if (intArray[j]/intArray[j-1]<1.1||intArray[j-1]/intArray[j]<1.1){
+                if (1-(intArray[j]/intArray[j-1])<.05&&1-(intArray[j]/intArray[j-1])>-.05){
                     count++;
             top+=intArray[j];
         }}
@@ -82,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         count=0;
         for(int j=intArray.length-bitmap.getWidth(); j<bitmap.getWidth()*bitmap.getHeight(); j++){
             if (j!= intArray.length-bitmap.getWidth())
-            if (intArray[j]/intArray[j-1]<1.1||intArray[j-1]/intArray[j]<1.1){
+                if (1-(intArray[j]/intArray[j-1])<.05&&1-(intArray[j]/intArray[j-1])>-.05){
             count++;
             bottom+=intArray[j];}
             }
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         count=0;
         for(int j=0; j<bitmap.getWidth()*bitmap.getHeight()-bitmap.getWidth(); j+=bitmap.getWidth()){
             if (j!= 0)
-                if (intArray[j]/intArray[j-1]<1.1||intArray[j-1]/intArray[j]<1.1){
+                if (1-(intArray[j]/intArray[j-1])<.05&&1-(intArray[j]/intArray[j-1])>-.05){
             left+=intArray[j];
                 count++;}}
 
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         for(int j=bitmap.getWidth(); j<bitmap.getWidth()*bitmap.getHeight(); j+=bitmap.getWidth()){
             if (j!= bitmap.getWidth())
-                if (intArray[j]/intArray[j-1]<1.1||intArray[j-1]/intArray[j]<1.1){
+                if (1-(intArray[j]/intArray[j-1])<.05&&1-(intArray[j]/intArray[j-1])>-.05){
             right+=intArray[j];
             count++;}}
 
@@ -115,6 +114,19 @@ public class MainActivity extends AppCompatActivity {
 
         if (right<0)
             right= right*-1;
+         int zero=4;
+
+        if (top==0)
+            zero--;
+        if(bottom==0)
+            zero--;
+        if(right==0)
+            zero--;
+        if(left==0)
+            zero--;
+
+      if (zero!=0)
+        top= (top+bottom+right+left)/zero;
 
         for (int i =0; i<intArray.length; i++){
                  if (x==bitmap.getWidth()-1){
@@ -124,41 +136,101 @@ public class MainActivity extends AppCompatActivity {
                  }else{
             x++;}
 
-
             if (intArray[i]<0)
                 w= intArray[i]*-1;
             else
-                w=intArray[i];
+                w=intArray [i];
 
-            if (w/top>1.75||top/w>1.75&&w/bottom>1.75||bottom/w>1.75&&w/left>1.75||left/w>1.75&&right/w>1.75||w/right>1.75){
+            if (w/top>1.75|| top/w>1.75){
                 bitmap1.setPixel(x, y, intArray[i]);
             }}
 
 
-          y=0;
-          x=0;
-        count=0;
 
 
 
-        Bitmap bitmap2= Bitmap.createBitmap(bitmap1.getWidth(), bitmap1.getHeight(), Bitmap.Config.RGB_565);
+
+        Bitmap bitmap2= Bitmap.createBitmap(bitmap1.getWidth(), bitmap1.getHeight(), Bitmap.Config.ARGB_8888);
         int intArray1[] = new int[bitmap1.getWidth()*bitmap1.getHeight()];
         bitmap1.getPixels(intArray1, 0, bitmap1.getWidth(), 0, 0, bitmap1.getWidth(), bitmap1.getHeight());
 
-        for(int j=0; j<bitmap1.getWidth()*3; j++){
+        y=0;
+        x=0;
+        count=0;
+        top=0;
+        intArray=null;
+        int count1=0;
+
+        for(int j=0; j<bitmap1.getHeight()*bitmap.getWidth()-(bitmap1.getHeight()*bitmap1.getWidth()j/10); j++){
+            if (intArray[j]!=0)
+                count1++;
+        }
+        for(int j=bitmap1.getWidth()*bitmap1.getHeight()/10; j<bitmap1.getHeight()*bitmap.getWidth()/9; j++){
+            if (intArray[j]!=0)
+                count1++;
+        }
+        for(int j=bitmap1.getWidth()*bitmap1.getHeight()/9; j<bitmap1.getHeight()*bitmap.getWidth()/8; j++){
+            if (intArray[j]!=0)
+                count1++;
+        }
+        for(int j=bitmap1.getWidth()*bitmap1.getHeight()/8; j<bitmap1.getHeight()*bitmap.getWidth()/7; j++){
+            if (intArray[j]!=0)
+                count1++;
+        }
+        for(int j=bitmap1.getWidth()*bitmap1.getHeight()/7; j<bitmap1.getHeight()*bitmap.getWidth()/6; j++){
+            if (intArray[j]!=0)
+                count1++;
+        }
+        for(int j=bitmap1.getWidth()*bitmap1.getHeight()/6; j<bitmap1.getHeight()*bitmap.getWidth()/5; j++){
+            if (intArray[j]!=0)
+                count1++;
+        }
+        for(int j=bitmap1.getWidth()*bitmap1.getHeight()/5; j<bitmap1.getHeight()*bitmap.getWidth()/4; j++){
+            if (intArray[j]!=0)
+                count1++;
+        }
+    for(int j=bitmap1.getWidth()*bitmap1.getHeight()/4; j<bitmap1.getHeight()*bitmap.getWidth()/3; j++){
+        if (intArray[j]!=0)
+            count1++;
+    }
+    for(int j=bitmap1.getWidth()*bitmap1.getHeight()/3; j<bitmap1.getHeight()*bitmap.getWidth()/2; j++){
+        if (intArray[j]!=0)
+            count1++;
+    }
+
+        /*for(int j=0; j<bitmap.getWidth(); j++){
+
+            if (count!=0){
+            jj= top/count;}
+            kk=intArray1[j];
+
             if (j!= 0)
-                if(intArray1[j]!=-16777216&&intArray1[j-1]!=-16777216){
-                    Log.i("here", ""+ intArray1[j]);
+                if(intArray1[j]!=0){
+                    if (top!=0&&count>0){
+                    if(1-(jj/kk)<.05&&1-(jj/kk)>-.05){
+                        Log.i("here2 ", "" + intArray1[j] + " " + count + " " + top + " " + (1 - (jj / kk)) + " " + (1 - (kk / jj)));
                     count++;
                     top+=intArray1[j];
                 }}
+                else{
+                        Log.i("here3 ", "" + intArray1[j]+" "+ count+" "+ top + " "+ (1-(jj/kk)) + " "+ (1-(kk/jj)));
+                        count++;
+                        top+=intArray1[j];}
+                }
+        else{if (count==0)
+                    top=0;}}
 
+        if (count!=0)
         top = (top / count);
+
         if (top<0)
             top= top*-1;
 
+        if (top!=0){
 
         for (int i =0; i<intArray1.length; i++){
+
+
             if (x==bitmap1.getWidth()-1){
                 x=0;
                 if (y!=bitmap1.getHeight()-1){
@@ -172,12 +244,17 @@ public class MainActivity extends AppCompatActivity {
             else
                 w=intArray1[i];
 
+            if (w/top>1.25||top/w>1.25){
 
-
-            if (w/top>1.75||top/w>1.75){
+                Log.i("here", "boom" + top/w+ " "+ w/top);
                     bitmap2.setPixel(x, y, intArray1[i]);
-                }
-        imageView.setImageBitmap(bitmap2);}}
+                }}
+
+        imageView.setImageBitmap(bitmap2);}
+    else{*/
+            imageView.setImageBitmap(bitmap1);}
+
+
 
 
 
